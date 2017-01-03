@@ -1,8 +1,47 @@
 # = Class: netbox::install
 
 class netbox::install {
-  package { [ 'libffi-dev', 'libxml2-dev', 'libxslt1-dev']:
-    ensure => 'installed',
+  
+  case $::osfamily {
+    'Debian': {
+       $packages = [ 
+         'libffi-dev',
+         'libxml2-dev',
+         'libxslt1-dev',
+         ] 
+         
+      @package { $packages:
+        ensure => present,
+        }
+        
+      realize (
+        Package['libffi-dev'],
+        Package['libxml2-dev'],
+        Package['libxslt1-dev'],
+      )
+     }
+     
+    'RedHat': {
+       $packages = [ 
+         'libffi-devel',
+         'libxml2-devel',
+         'libxslt1-devel',
+         ] 
+         
+      @package { $packages:
+        ensure => present,
+        }
+        
+      realize (
+        Package['libffi-devel'],
+        Package['libxml2-devel'],
+        Package['libxslt1-devel'],
+      )
+     }
+    
+      default: {
+        fail("Unsupported osfamily: ${::osfamily} The 'netbox' module only supports osfamily Debian or RedHat.")
+     }
   }
 
   class { '::python':
