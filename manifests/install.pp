@@ -25,7 +25,7 @@ class netbox::install {
        $packages = [ 
          'libffi-devel',
          'libxml2-devel',
-         'libxslt1-devel',
+         'libxslt-devel',
          ] 
          
       @package { $packages:
@@ -35,7 +35,7 @@ class netbox::install {
       realize (
         Package['libffi-devel'],
         Package['libxml2-devel'],
-        Package['libxslt1-devel'],
+        Package['libxslt-devel'],
       )
      }
     
