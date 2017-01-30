@@ -54,7 +54,7 @@ class netbox::install {
     dev        => 'present',
     virtualenv => 'present',
     gunicorn   => 'present',
-    } ->
+    }
 
   file { $::netbox::directory:
     ensure => 'directory',
@@ -69,18 +69,19 @@ class netbox::install {
     extract_command => 'tar xzf %s --strip-components=1',
     extract_path    => $::netbox::directory,
     extract         => true,
+  }
+
+  # Upgrade pip first
+  python::pip { 'pip':
+    virtualenv => $::netbox::directory,
+    require => [ Archive["netbox-${::netbox::version}.tar.gz"] ],
     } ->
 
-    # Upgrade pip first
-    python::pip { 'pip':
-      virtualenv => $::netbox::directory,
-      } ->
-
-      python::virtualenv { $::netbox::directory:
-        ensure       => present,
-        version      => 'system',
-        requirements => "${::netbox::directory}/requirements.txt",
-        systempkgs   => true,
-      }
+    python::virtualenv { $::netbox::directory:
+      ensure       => present,
+      version      => 'system',
+      requirements => "${::netbox::directory}/requirements.txt",
+      systempkgs   => true,
+    }
 
 }
