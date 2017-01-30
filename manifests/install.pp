@@ -82,9 +82,5 @@ class netbox::install {
         requirements => "${::netbox::directory}/requirements.txt",
         systempkgs   => true,
       }
-}
-
-
-
 
 }
