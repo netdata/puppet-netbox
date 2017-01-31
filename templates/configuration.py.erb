@@ -12,9 +12,9 @@ ALLOWED_HOSTS = ['<%= @fqdn %>']
 
 # PostgreSQL database configuration.
 DATABASE = {
-    'NAME': '<%= @db_database %>',         # Database name
-    'USER': '<%= @db_username %>',               # PostgreSQL username
-    'PASSWORD': '<%= @db_password %>',           # PostgreSQL password
+    'NAME': '<%= scope['netbox::db_database'] %>',         # Database name
+    'USER': '<%= scope['netbox::db_username'] %>',               # PostgreSQL username
+    'PASSWORD': '<%= scope['netbox::db_password'] %>',           # PostgreSQL password
     'HOST': 'localhost',      # Database server
     'PORT': '',               # Database port (leave blank for default)
 }
