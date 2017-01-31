@@ -74,8 +74,7 @@ class netbox::install {
   # Upgrade pip first
   python::pip { 'pip':
     virtualenv => $::netbox::directory,
-    require => [ Archive["netbox-${::netbox::version}.tar.gz"] ],
-    } ->
+    }
 
     python::virtualenv { $::netbox::directory:
       ensure       => present,
