@@ -54,14 +54,16 @@ class netbox::install {
     dev        => 'present',
     virtualenv => 'present',
     gunicorn   => 'present',
-    }
+  }
 
-  file { $::netbox::directory:
-    ensure => 'directory',
+  python::virtualenv { $::netbox::directory:
+    ensure       => present,
+    version      => 'system',
+    systempkgs   => true,
     owner  => 'root',
     group  => 'root',
     mode   => '0755',
-  } ->
+    } ->
 
   archive { "netbox-${::netbox::version}.tar.gz":
     source          => "https://github.com/digitalocean/netbox/archive/v${::netbox::version}.tar.gz",
@@ -69,18 +71,17 @@ class netbox::install {
     extract_command => 'tar xzf %s --strip-components=1',
     extract_path    => $::netbox::directory,
     extract         => true,
-  }
+  } ->
 
   # Upgrade pip first
   python::pip { 'pip':
     virtualenv => $::netbox::directory,
+    } ->
+
+    python::requirements{ 'netbox-virtualenv':
+      requirements => "${::netbox::directory}/requirements.txt",
+      virtualenv => $::netbox::directory,
     }
 
-    python::virtualenv { $::netbox::directory:
-      ensure       => present,
-      version      => 'system',
-      requirements => "${::netbox::directory}/requirements.txt",
-      systempkgs   => true,
-    }
 
 }
