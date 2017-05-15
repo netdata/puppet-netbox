@@ -13,7 +13,7 @@ class netbox::service {
     timeout     => 30,
   }
 
-  nginx::resource::vhost { $::netbox::vhost:
+  nginx::resource::server { $::netbox::vhost:
     proxy                => "http://unix:${::netbox::directory}/gunicorn.socket",
     server_name          => [ $::netbox::vhost, $::fqdn ],
     location_cfg_prepend => {
